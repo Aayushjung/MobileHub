@@ -6,7 +6,7 @@ package com.mobilehub.model;
 
 /**
  *
- * @author ROG STRIX
+ * @author aayush
  */
 public class ModelDetails {
     private int modelId;

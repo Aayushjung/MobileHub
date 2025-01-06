@@ -6,7 +6,7 @@ package com.mobilehub.util;
 
 /**
  *
- * @author ROG STRIX
+ * @author aayush
  */
 import javax.swing.JOptionPane;
 

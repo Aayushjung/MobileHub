@@ -4,6 +4,10 @@
  */
 package com.mobilehub.view;
 
+import com.mobilehub.controller.algorithms.BinarySearch;
+import com.mobilehub.controller.algorithms.InsertionSort;
+import com.mobilehub.controller.algorithms.MergeSort;
+import com.mobilehub.controller.algorithms.SelectionSort;
 import com.mobilehub.model.ModelDetails;
 import com.mobilehub.util.Validation;
 import java.util.LinkedList;
@@ -13,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author ROG STRIX
+ * @author aayush
  */
 public class login extends javax.swing.JFrame {
     private List<ModelDetails> modelList;
@@ -41,6 +45,7 @@ public class login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         login = new javax.swing.JPanel();
         logintext = new javax.swing.JLabel();
         username = new javax.swing.JLabel();
@@ -90,6 +95,11 @@ public class login extends javax.swing.JFrame {
         searchbutton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         admintable = new javax.swing.JTable();
+        searchtext = new javax.swing.JTextField();
+        insertionradio = new javax.swing.JRadioButton();
+        selectionradio = new javax.swing.JRadioButton();
+        mergeradio = new javax.swing.JRadioButton();
+        jLabel20 = new javax.swing.JLabel();
         salespage = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -332,7 +342,7 @@ public class login extends javax.swing.JFrame {
                 addbuttonActionPerformed(evt);
             }
         });
-        adminpage.add(addbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, 100, 37));
+        adminpage.add(addbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 430, 100, 37));
 
         updatebutton.setText("Update");
         updatebutton.addActionListener(new java.awt.event.ActionListener() {
@@ -340,7 +350,7 @@ public class login extends javax.swing.JFrame {
                 updatebuttonActionPerformed(evt);
             }
         });
-        adminpage.add(updatebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 430, 100, 37));
+        adminpage.add(updatebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 100, 37));
 
         deletebutton.setText("Delete");
         deletebutton.addActionListener(new java.awt.event.ActionListener() {
@@ -348,7 +358,7 @@ public class login extends javax.swing.JFrame {
                 deletebuttonActionPerformed(evt);
             }
         });
-        adminpage.add(deletebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 430, 100, 37));
+        adminpage.add(deletebutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 430, 100, 37));
 
         clearbutton.setText("Clear");
         clearbutton.addActionListener(new java.awt.event.ActionListener() {
@@ -356,7 +366,7 @@ public class login extends javax.swing.JFrame {
                 clearbuttonActionPerformed(evt);
             }
         });
-        adminpage.add(clearbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 520, 100, 37));
+        adminpage.add(clearbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 550, 100, 37));
 
         modelid.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         modelid.setText("Model Id");
@@ -407,19 +417,24 @@ public class login extends javax.swing.JFrame {
         adminpage.add(storagefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 520, 77, -1));
 
         searchbutton.setText("Search");
+        searchbutton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchbuttonMouseClicked(evt);
+            }
+        });
         searchbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchbuttonActionPerformed(evt);
             }
         });
-        adminpage.add(searchbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 460, 100, 37));
+        adminpage.add(searchbutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 500, 100, 37));
 
         admintable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "MobileID", "Model Name", "Brand", "Price", "Storage", "Quantity"
+                "Model Id", "Model Name", "Brand", "Price", "Storage", "Quantity"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -441,6 +456,37 @@ public class login extends javax.swing.JFrame {
         }
 
         adminpage.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 760, 290));
+        adminpage.add(searchtext, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 450, 100, 30));
+
+        buttonGroup1.add(insertionradio);
+        insertionradio.setText("Insertion Sort [ Model ID ]");
+        insertionradio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertionradioActionPerformed(evt);
+            }
+        });
+        adminpage.add(insertionradio, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 410, -1, -1));
+
+        buttonGroup1.add(selectionradio);
+        selectionradio.setText("Selection Sort [ Price ]");
+        selectionradio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectionradioActionPerformed(evt);
+            }
+        });
+        adminpage.add(selectionradio, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 440, -1, -1));
+
+        buttonGroup1.add(mergeradio);
+        mergeradio.setText("Merge Sort [ Quantity ]");
+        mergeradio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mergeradioActionPerformed(evt);
+            }
+        });
+        adminpage.add(mergeradio, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 470, -1, -1));
+
+        jLabel20.setText("Search By Brand");
+        adminpage.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 430, -1, -1));
 
         mainpanel.add(adminpage, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 850, 600));
 
@@ -891,6 +937,54 @@ public class login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deletebuttonActionPerformed
 
+    private void searchbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchbuttonMouseClicked
+        String searchText = searchtext.getText().trim();
+
+        if (searchText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a brand name to search.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Sort the modelList by brand name (required for binary search)
+        BinarySearch.sortByBrand(modelList);
+
+        // Perform binary search for the brand name
+        int index = BinarySearch.searchByBrand(modelList, searchText);
+
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Brand not found.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Update the table with the search result
+            DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+            BinarySearch.updateTableWithSearchResult(modelList, tableModel, searchText);
+        }
+    }//GEN-LAST:event_searchbuttonMouseClicked
+
+    private void selectionradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionradioActionPerformed
+        // TODO add your handling code here:
+       // Get the table model
+        DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+
+        // Perform selection sort on the modelList based on price
+        SelectionSort.sortByPrice(modelList, tableModel);
+    }//GEN-LAST:event_selectionradioActionPerformed
+
+    private void mergeradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mergeradioActionPerformed
+        // TODO add your handling code here:
+          DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+
+        // Perform merge sort on the modelList based on quantity
+        MergeSort.sortByQuantity(modelList, tableModel);
+    }//GEN-LAST:event_mergeradioActionPerformed
+
+    private void insertionradioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertionradioActionPerformed
+        // TODO add your handling code here:
+            DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+
+    // Perform insertion sort on the modelList based on modelId
+    InsertionSort.sortByModelId(modelList, tableModel);
+    }//GEN-LAST:event_insertionradioActionPerformed
+
     private void initializeData() {
         modelList = new LinkedList<>();
         phoneCount = 0; // Initialize count to 0
@@ -960,11 +1054,13 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel admintitle;
     private javax.swing.JLabel brand;
     private javax.swing.JTextField brandfield;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton clearbutton;
     private javax.swing.JButton deletebutton;
     private javax.swing.JLabel home;
     private javax.swing.JPanel homepage;
     private javax.swing.JLabel homepageimagelabel;
+    private javax.swing.JRadioButton insertionradio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -977,6 +1073,7 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -992,6 +1089,7 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel logo;
     private javax.swing.JButton logoutbutton;
     private javax.swing.JPanel mainpanel;
+    private javax.swing.JRadioButton mergeradio;
     private javax.swing.JTextField modelfield;
     private javax.swing.JLabel modelid;
     private javax.swing.JLabel modelname;
@@ -1009,6 +1107,8 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel sales;
     private javax.swing.JPanel salespage;
     private javax.swing.JButton searchbutton;
+    private javax.swing.JTextField searchtext;
+    private javax.swing.JRadioButton selectionradio;
     private javax.swing.JLabel storage;
     private javax.swing.JTextField storagefield;
     private javax.swing.JButton updatebutton;
