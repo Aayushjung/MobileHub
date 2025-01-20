@@ -8,6 +8,7 @@ import com.mobilehub.controller.algorithms.BinarySearch;
 import com.mobilehub.controller.algorithms.InsertionSort;
 import com.mobilehub.controller.algorithms.MergeSort;
 import com.mobilehub.controller.algorithms.SelectionSort;
+import com.mobilehub.controller.datastructure.UndoStack;
 import com.mobilehub.model.ModelDetails;
 import com.mobilehub.util.Validation;
 import java.util.LinkedList;
@@ -22,13 +23,14 @@ import javax.swing.table.DefaultTableModel;
 public class login extends javax.swing.JFrame {
     private List<ModelDetails> modelList;
     private int phoneCount; // To store the count
-
+    private UndoStack undoStack; 
     /**
      * Creates new form login
      */
     public login() {
         initComponents();
-        initializeData();
+        undoStack = new UndoStack(); // Initialize undoStack first
+        initializeData(); // Now call initializeData()
         homepage.setVisible(false);
         adminpage.setVisible(false);
         salespage.setVisible(false);
@@ -49,7 +51,6 @@ public class login extends javax.swing.JFrame {
         login = new javax.swing.JPanel();
         logintext = new javax.swing.JLabel();
         username = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         usertext = new javax.swing.JTextField();
         password = new javax.swing.JLabel();
         loginbutton = new javax.swing.JToggleButton();
@@ -67,12 +68,12 @@ public class login extends javax.swing.JFrame {
         homepage = new javax.swing.JPanel();
         logoutbutton = new javax.swing.JButton();
         welcomeback = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        totalphones = new javax.swing.JLabel();
+        totalphonestext = new javax.swing.JLabel();
+        brands = new javax.swing.JLabel();
+        brandstext = new javax.swing.JLabel();
+        viewproduct = new javax.swing.JLabel();
+        addproduct = new javax.swing.JLabel();
         homepageimagelabel = new javax.swing.JLabel();
         adminpage = new javax.swing.JPanel();
         admintitle = new javax.swing.JLabel();
@@ -99,20 +100,21 @@ public class login extends javax.swing.JFrame {
         insertionradio = new javax.swing.JRadioButton();
         selectionradio = new javax.swing.JRadioButton();
         mergeradio = new javax.swing.JRadioButton();
-        jLabel20 = new javax.swing.JLabel();
+        searchbybrand = new javax.swing.JLabel();
+        undobutton = new javax.swing.JButton();
         salespage = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        bestsellingimg = new javax.swing.JLabel();
+        salestitle = new javax.swing.JLabel();
+        bestselling = new javax.swing.JLabel();
+        indemand = new javax.swing.JLabel();
+        indemandimg = new javax.swing.JLabel();
         productpage = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        product1 = new javax.swing.JLabel();
+        product2 = new javax.swing.JLabel();
+        product3 = new javax.swing.JLabel();
+        product4 = new javax.swing.JLabel();
+        product5 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -138,7 +140,6 @@ public class login extends javax.swing.JFrame {
         username.setText("Username");
         username.setPreferredSize(new java.awt.Dimension(70, 30));
         login.add(username, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 190, 90, 40));
-        login.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(567, 155, 37, -1));
 
         usertext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,45 +278,45 @@ public class login extends javax.swing.JFrame {
         welcomeback.setOpaque(true);
         homepage.add(welcomeback, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 100));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Total Phones");
-        homepage.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 130, 30));
-        homepage.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, 60, 20));
+        totalphones.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        totalphones.setForeground(new java.awt.Color(255, 0, 51));
+        totalphones.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        totalphones.setText("Total Phones");
+        homepage.add(totalphones, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 130, 30));
+        homepage.add(totalphonestext, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, 60, 20));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Brands");
-        homepage.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 110, 40));
+        brands.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        brands.setForeground(new java.awt.Color(255, 0, 51));
+        brands.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        brands.setText("Brands");
+        homepage.add(brands, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 110, 40));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel5.setText("Apple, Samsung, Oppo, OnePlus, Pixel");
-        homepage.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 390, 40));
+        brandstext.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        brandstext.setForeground(new java.awt.Color(255, 0, 51));
+        brandstext.setText("Apple, Samsung, Oppo, OnePlus, Pixel");
+        homepage.add(brandstext, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 390, 40));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("View Products");
-        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+        viewproduct.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        viewproduct.setForeground(new java.awt.Color(255, 0, 51));
+        viewproduct.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        viewproduct.setText("View Products");
+        viewproduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel6MouseClicked(evt);
+                viewproductMouseClicked(evt);
             }
         });
-        homepage.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 200, 100));
+        homepage.add(viewproduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 200, 100));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Add Products");
-        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+        addproduct.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        addproduct.setForeground(new java.awt.Color(255, 0, 51));
+        addproduct.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        addproduct.setText("Add Products");
+        addproduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel7MouseClicked(evt);
+                addproductMouseClicked(evt);
             }
         });
-        homepage.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, 180, 110));
+        homepage.add(addproduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, 180, 110));
 
         homepageimagelabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         homepageimagelabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/homepage.jpg"))); // NOI18N
@@ -485,31 +486,39 @@ public class login extends javax.swing.JFrame {
         });
         adminpage.add(mergeradio, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 470, -1, -1));
 
-        jLabel20.setText("Search By Brand");
-        adminpage.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 430, -1, -1));
+        searchbybrand.setText("Search By Brand");
+        adminpage.add(searchbybrand, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 430, -1, -1));
+
+        undobutton.setText("Undo");
+        undobutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undobuttonActionPerformed(evt);
+            }
+        });
+        adminpage.add(undobutton, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 553, 90, 30));
 
         mainpanel.add(adminpage, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, 850, 600));
 
         salespage.setMaximumSize(new java.awt.Dimension(850, 600));
         salespage.setMinimumSize(new java.awt.Dimension(850, 600));
 
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/samsung.jpg"))); // NOI18N
+        bestsellingimg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/samsung.jpg"))); // NOI18N
 
-        jLabel15.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("Sales Page");
-        jLabel15.setOpaque(true);
+        salestitle.setBackground(new java.awt.Color(204, 204, 255));
+        salestitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        salestitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        salestitle.setText("Sales Page");
+        salestitle.setOpaque(true);
 
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Best Selling");
+        bestselling.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        bestselling.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        bestselling.setText("Best Selling");
 
-        jLabel17.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setText("In-Demand");
+        indemand.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        indemand.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        indemand.setText("In-Demand");
 
-        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/pixel.jpg"))); // NOI18N
+        indemandimg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/pixel.jpg"))); // NOI18N
 
         javax.swing.GroupLayout salespageLayout = new javax.swing.GroupLayout(salespage);
         salespage.setLayout(salespageLayout);
@@ -518,33 +527,33 @@ public class login extends javax.swing.JFrame {
             .addGroup(salespageLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(salespageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(indemand, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bestselling, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addGroup(salespageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bestsellingimg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(indemandimg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(206, 206, 206))
-            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(salestitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         salespageLayout.setVerticalGroup(
             salespageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(salespageLayout.createSequentialGroup()
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(salestitle, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(salespageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(salespageLayout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(bestselling, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(salespageLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(bestsellingimg, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(salespageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(salespageLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(indemand, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salespageLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(indemandimg, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -556,16 +565,16 @@ public class login extends javax.swing.JFrame {
         jLabel8.setText("Product Page");
         jLabel8.setOpaque(true);
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/apple.png"))); // NOI18N
+        product1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/apple.png"))); // NOI18N
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/oneplus.jpg"))); // NOI18N
-        jLabel10.setOpaque(true);
+        product2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/oneplus.jpg"))); // NOI18N
+        product2.setOpaque(true);
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/pixel.jpg"))); // NOI18N
+        product3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/pixel.jpg"))); // NOI18N
 
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/samsung.jpg"))); // NOI18N
+        product4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/samsung.jpg"))); // NOI18N
 
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/oppo.png"))); // NOI18N
+        product5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mobilehub/resources/oppo.png"))); // NOI18N
 
         javax.swing.GroupLayout productpageLayout = new javax.swing.GroupLayout(productpage);
         productpage.setLayout(productpageLayout);
@@ -575,17 +584,17 @@ public class login extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(productpageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productpageLayout.createSequentialGroup()
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(product1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(product2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(productpageLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(product4, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(103, 103, 103)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productpageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(product3, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(product5, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(57, Short.MAX_VALUE))
             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -596,15 +605,15 @@ public class login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(productpageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(productpageLayout.createSequentialGroup()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(product3, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel13))
+                        .addComponent(product5))
                     .addGroup(productpageLayout.createSequentialGroup()
                         .addGroup(productpageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(product1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(product2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(product4, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -697,7 +706,14 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_searchbuttonActionPerformed
 
     private void clearbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearbuttonActionPerformed
-        // TODO add your handling code here:
+        // Clear the text fields
+        modelfield.setText("");
+        namefield.setText("");
+        brandfield.setText("");
+        pricefield.setText("");
+        storagefield.setText("");
+        quantityfield.setText("");
+        searchtext.setText("");
     }//GEN-LAST:event_clearbuttonActionPerformed
 
     private void homeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_homeMouseClicked
@@ -735,6 +751,7 @@ public class login extends javax.swing.JFrame {
     private void logoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbuttonActionPerformed
         // TODO add your handling code here:
         homepage.setVisible(false);
+        mainpanel.setVisible(false);
         adminpage.setVisible(false);
         salespage.setVisible(false);
         productpage.setVisible(false);
@@ -749,192 +766,210 @@ public class login extends javax.swing.JFrame {
         login.setVisible(true);
     }//GEN-LAST:event_logoutbuttonActionPerformed
 
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+    private void viewproductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewproductMouseClicked
             homepage.setVisible(false);
             adminpage.setVisible(false);
             salespage.setVisible(false);
             productpage.setVisible(true);
-    }//GEN-LAST:event_jLabel6MouseClicked
+    }//GEN-LAST:event_viewproductMouseClicked
 
-    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+    private void addproductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addproductMouseClicked
             homepage.setVisible(false);
             adminpage.setVisible(true);
             salespage.setVisible(false);
             productpage.setVisible(false);
-    }//GEN-LAST:event_jLabel7MouseClicked
+    }//GEN-LAST:event_addproductMouseClicked
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
-        // TODO add your handling code here:
-        // Get text from each input field
-        String modelIdText = modelfield.getText().trim();
-        String modelName = namefield.getText().trim();
-        String brand = brandfield.getText().trim();
-        String priceText = pricefield.getText().trim();
-        String storage = storagefield.getText().trim();
-        String quantityText = quantityfield.getText().trim();
+    // Get text from each input field
+    String modelIdText = modelfield.getText().trim();
+    String modelName = namefield.getText().trim();
+    String brand = brandfield.getText().trim();
+    String priceText = pricefield.getText().trim();
+    String storage = storagefield.getText().trim();
+    String quantityText = quantityfield.getText().trim();
 
-        // Validations
-        if (!Validation.isNotNullOrEmpty(modelIdText, "Model ID", this) ||
-            !Validation.isNotNullOrEmpty(modelName, "Model Name", this) ||
-            !Validation.isNotNullOrEmpty(brand, "Brand", this) ||
-            !Validation.isNotNullOrEmpty(priceText, "Price", this) ||
-            !Validation.isNotNullOrEmpty(storage, "Storage", this) ||
-            !Validation.isNotNullOrEmpty(quantityText, "Quantity", this)) {
-            return; // Stop if any required field is empty
-        }
+    // Validations
+    if (!Validation.isNotNullOrEmpty(modelIdText, "Model ID", this)
+            || !Validation.isNotNullOrEmpty(modelName, "Model Name", this)
+            || !Validation.isNotNullOrEmpty(brand, "Brand", this)
+            || !Validation.isNotNullOrEmpty(priceText, "Price", this)
+            || !Validation.isNotNullOrEmpty(storage, "Storage", this)
+            || !Validation.isNotNullOrEmpty(quantityText, "Quantity", this)) {
+        return; // Stop if any required field is empty
+    }
 
-        if (!Validation.isValidInteger(modelIdText, "Model ID", this) ||
-            !Validation.isValidInteger(priceText, "Price", this) ||
-            !Validation.isValidInteger(quantityText, "Quantity", this)) {
-            return; // Stop if any field is not an integer
-        }
+    if (!Validation.isValidInteger(modelIdText, "Model ID", this)
+            || !Validation.isValidInteger(priceText, "Price", this)
+            || !Validation.isValidInteger(quantityText, "Quantity", this)) {
+        return; // Stop if any field is not an integer
+    }
 
-        int modelId = Integer.parseInt(modelIdText);
-        int price = Integer.parseInt(priceText);
-        int quantity = Integer.parseInt(quantityText);
+    int modelId = Integer.parseInt(modelIdText);
+    int price = Integer.parseInt(priceText);
+    int quantity = Integer.parseInt(quantityText);
 
-         if (!Validation.isPositive(modelId, "Model ID", this) ||
-                !Validation.isPositive(price, "Price", this) ||
-                !Validation.isPositive(quantity, "Quantity", this)) {
-            return;
-        }
+    if (!Validation.isPositive(modelId, "Model ID", this)
+            || !Validation.isPositive(price, "Price", this)
+            || !Validation.isPositive(quantity, "Quantity", this)) {
+        return;
+    }
 
+    // Validate for unique Model ID
+    if (!Validation.isUniqueModelId(modelId, modelList, this)) {
+        return; // Stop if model ID is not unique
+    }
 
-        // Create a new ModelDetails object
-        ModelDetails newModel = new ModelDetails(modelId, modelName, brand, price, storage, quantity);
+    // Create a new ModelDetails object
+    ModelDetails newModel = new ModelDetails(modelId, modelName, brand, price, storage, quantity);
 
-        //Add to admin table
-         addMobile(newModel);
+    // Add to admin table
+    addMobile(newModel);
 
+    // Push the ADD action onto the undo stack
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.ADD, newModel));
 
-        // Clear input fields after successful add
-        modelfield.setText("");
-        namefield.setText("");
-        brandfield.setText("");
-        pricefield.setText("");
-        storagefield.setText("");
-        quantityfield.setText("");
+    // Clear input fields after successful add
+    modelfield.setText("");
+    namefield.setText("");
+    brandfield.setText("");
+    pricefield.setText("");
+    storagefield.setText("");
+    quantityfield.setText("");
 
-        JOptionPane.showMessageDialog(this, "Model added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(this, "Model added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_addbuttonActionPerformed
 
+    
     private void updatebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebuttonActionPerformed
-        // TODO add your handling code here:
-                int selectedRow = admintable.getSelectedRow();
+    int selectedRow = admintable.getSelectedRow();
 
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a row to update.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a row to update.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-       // Get text from each input field
-        String modelIdText = modelfield.getText().trim();
-        String modelName = namefield.getText().trim();
-        String brand = brandfield.getText().trim();
-        String priceText = pricefield.getText().trim();
-        String storage = storagefield.getText().trim();
-        String quantityText = quantityfield.getText().trim();
-        
-         // Validations
-        if (!Validation.isNotNullOrEmpty(modelIdText, "Model ID", this) ||
-            !Validation.isNotNullOrEmpty(modelName, "Model Name", this) ||
-            !Validation.isNotNullOrEmpty(brand, "Brand", this) ||
-            !Validation.isNotNullOrEmpty(priceText, "Price", this) ||
-            !Validation.isNotNullOrEmpty(storage, "Storage", this) ||
-            !Validation.isNotNullOrEmpty(quantityText, "Quantity", this)) {
-            return; // Stop if any required field is empty
-        }
+    // Get text from each input field
+    String modelIdText = modelfield.getText().trim();
+    String modelName = namefield.getText().trim();
+    String brand = brandfield.getText().trim();
+    String priceText = pricefield.getText().trim();
+    String storage = storagefield.getText().trim();
+    String quantityText = quantityfield.getText().trim();
 
-        if (!Validation.isValidInteger(modelIdText, "Model ID", this) ||
-            !Validation.isValidInteger(priceText, "Price", this) ||
-            !Validation.isValidInteger(quantityText, "Quantity", this)) {
-            return; // Stop if any field is not an integer
-        }
+    // Validations
+    if (!Validation.isNotNullOrEmpty(modelIdText, "Model ID", this)
+            || !Validation.isNotNullOrEmpty(modelName, "Model Name", this)
+            || !Validation.isNotNullOrEmpty(brand, "Brand", this)
+            || !Validation.isNotNullOrEmpty(priceText, "Price", this)
+            || !Validation.isNotNullOrEmpty(storage, "Storage", this)
+            || !Validation.isNotNullOrEmpty(quantityText, "Quantity", this)) {
+        return; // Stop if any required field is empty
+    }
 
-        int modelId = Integer.parseInt(modelIdText);
-        int price = Integer.parseInt(priceText);
-        int quantity = Integer.parseInt(quantityText);
+    if (!Validation.isValidInteger(modelIdText, "Model ID", this)
+            || !Validation.isValidInteger(priceText, "Price", this)
+            || !Validation.isValidInteger(quantityText, "Quantity", this)) {
+        return; // Stop if any field is not an integer
+    }
 
-        if (!Validation.isPositive(modelId, "Model ID", this) ||
-                !Validation.isPositive(price, "Price", this) ||
-                !Validation.isPositive(quantity, "Quantity", this)) {
-            return;
-        }
+    int modelId = Integer.parseInt(modelIdText);
+    int price = Integer.parseInt(priceText);
+    int quantity = Integer.parseInt(quantityText);
 
+    if (!Validation.isPositive(modelId, "Model ID", this)
+            || !Validation.isPositive(price, "Price", this)
+            || !Validation.isPositive(quantity, "Quantity", this)) {
+        return;
+    }
 
-        // Create a new ModelDetails object
-        ModelDetails updatedModel = new ModelDetails(modelId, modelName, brand, price, storage, quantity);
+    // Get the original model ID from the table
+    int originalModelId = (int) admintable.getValueAt(selectedRow, 0);
 
-       // Update the model list
-        modelList.set(selectedRow, updatedModel);
+    // Validate for unique Model ID (for update)
+    if (!Validation.isUniqueModelIdForUpdate(modelId, originalModelId, modelList, this)) {
+        return; // Stop if model ID is not unique
+    }
 
+    // Get the original model before the update
+    ModelDetails originalModel = modelList.get(selectedRow);
 
-        //Update the table
-        DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+    // Create a new ModelDetails object for the updated model
+    ModelDetails updatedModel = new ModelDetails(modelId, modelName, brand, price, storage, quantity);
 
-         tableModel.setValueAt(updatedModel.getModelId(),selectedRow,0);
-        tableModel.setValueAt(updatedModel.getModelName(),selectedRow,1);
-        tableModel.setValueAt(updatedModel.getBrand(),selectedRow,2);
-        tableModel.setValueAt(updatedModel.getPrice(),selectedRow,3);
-        tableModel.setValueAt(updatedModel.getStorage(),selectedRow,4);
-        tableModel.setValueAt(updatedModel.getQuantity(),selectedRow,5);
+    // Update the model list
+    modelList.set(selectedRow, updatedModel);
 
+    //Update the table
+    DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
 
-        // Clear input fields
-       modelfield.setText("");
-        namefield.setText("");
-        brandfield.setText("");
-        pricefield.setText("");
-        storagefield.setText("");
-        quantityfield.setText("");
+    tableModel.setValueAt(updatedModel.getModelId(), selectedRow, 0);
+    tableModel.setValueAt(updatedModel.getModelName(), selectedRow, 1);
+    tableModel.setValueAt(updatedModel.getBrand(), selectedRow, 2);
+    tableModel.setValueAt(updatedModel.getPrice(), selectedRow, 3);
+    tableModel.setValueAt(updatedModel.getStorage(), selectedRow, 4);
+    tableModel.setValueAt(updatedModel.getQuantity(), selectedRow, 5);
 
+    // Push the UPDATE action onto the undo stack
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.UPDATE, originalModel, selectedRow));
 
-        JOptionPane.showMessageDialog(this, "Model updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    // Clear input fields
+    modelfield.setText("");
+    namefield.setText("");
+    brandfield.setText("");
+    pricefield.setText("");
+    storagefield.setText("");
+    quantityfield.setText("");
+
+    JOptionPane.showMessageDialog(this, "Model updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_updatebuttonActionPerformed
 
     private void deletebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deletebuttonActionPerformed
-        // TODO add your handling code here:
-        String modelIdText = modelfield.getText().trim();
+    String modelIdText = modelfield.getText().trim();
 
+    // Validate model ID
+    if (!Validation.isNotNullOrEmpty(modelIdText, "Model ID", this)
+            || !Validation.isValidInteger(modelIdText, "Model ID", this)) {
+        return;
+    }
 
-        // Validate model ID
-        if (!Validation.isNotNullOrEmpty(modelIdText, "Model ID", this) ||
-            !Validation.isValidInteger(modelIdText, "Model ID", this))
-            {
-                return;
-            }
+    int modelId = Integer.parseInt(modelIdText);
 
-        int modelId = Integer.parseInt(modelIdText);
+    if (!Validation.isPositive(modelId, "Model ID", this)) {
+        return;
+    }
 
-        if (!Validation.isPositive(modelId, "Model ID", this))
-        {
-            return;
+    // Search for model in list
+    int indexToDelete = -1;
+    for (int i = 0; i < modelList.size(); i++) {
+        if (modelList.get(i).getModelId() == modelId) {
+            indexToDelete = i;
+            break;
         }
+    }
 
-        // Search for model in list
-        int indexToDelete = -1;
-        for (int i = 0; i < modelList.size(); i++) {
-            if (modelList.get(i).getModelId() == modelId) {
-                indexToDelete = i;
-                break;
-            }
-        }
-        // If found delete it from the table and model list
-        if (indexToDelete != -1) {
-             // Remove from the table model first
-             DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
-             tableModel.removeRow(indexToDelete);
+    // If found, delete it from the table and model list
+    if (indexToDelete != -1) {
+        // Get the model before deleting
+        ModelDetails deletedModel = modelList.get(indexToDelete);
 
-            // Remove from the model list.
-            modelList.remove(indexToDelete);
+        // Remove from the table model first
+        DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+        tableModel.removeRow(indexToDelete);
 
-          // clear the input field
-           modelfield.setText("");
+        // Remove from the model list.
+        modelList.remove(indexToDelete);
 
-            JOptionPane.showMessageDialog(this, "Model deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-          JOptionPane.showMessageDialog(this, "Model with ID: " + modelId + " not found.", "Input Error", JOptionPane.ERROR_MESSAGE);
-        }
+        // Push the DELETE action onto the undo stack
+        undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.DELETE, deletedModel, indexToDelete));
+
+        // clear the input field
+        modelfield.setText("");
+
+        JOptionPane.showMessageDialog(this, "Model deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "Model with ID: " + modelId + " not found.", "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_deletebuttonActionPerformed
 
     private void searchbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchbuttonMouseClicked
@@ -985,23 +1020,91 @@ public class login extends javax.swing.JFrame {
     InsertionSort.sortByModelId(modelList, tableModel);
     }//GEN-LAST:event_insertionradioActionPerformed
 
-    private void initializeData() {
-        modelList = new LinkedList<>();
-        phoneCount = 0; // Initialize count to 0
+    private void undobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undobuttonActionPerformed
+    if (undoStack.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Nothing to undo.", "Undo", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+
+    UndoStack.StackAction action = undoStack.popAction();
+    DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
+
+    if (action.getType() == UndoStack.StackAction.ActionType.ADD) {
+        // Undo ADD: Remove the model from the list and table
+        ModelDetails model = action.getModel();
+        int modelIndex = findModelIndex(model.getModelId());
+
+        if (modelIndex != -1) {
+            modelList.remove(modelIndex);
+            tableModel.removeRow(modelIndex); // Correctly remove row from table
+        }
+
+    } else if (action.getType() == UndoStack.StackAction.ActionType.UPDATE) {
+        // Undo UPDATE: Restore the original model in the list and table
+        ModelDetails originalModel = action.getModel();
+        int index = action.getIndex();
+
+        modelList.set(index, originalModel);
+        tableModel.setValueAt(originalModel.getModelId(), index, 0);
+        tableModel.setValueAt(originalModel.getModelName(), index, 1);
+        tableModel.setValueAt(originalModel.getBrand(), index, 2);
+        tableModel.setValueAt(originalModel.getPrice(), index, 3);
+        tableModel.setValueAt(originalModel.getStorage(), index, 4);
+        tableModel.setValueAt(originalModel.getQuantity(), index, 5);
+
+    } else if (action.getType() == UndoStack.StackAction.ActionType.DELETE) {
+        // Undo DELETE: Re-add the model to the list and table
+        ModelDetails model = action.getModel();
+        int index = action.getIndex();
+
+        modelList.add(index, model);
+        tableModel.insertRow(index, new Object[]{
+                model.getModelId(), model.getModelName(), model.getBrand(),
+                model.getPrice(), model.getStorage(), model.getQuantity()
+        });
+    }
+    //update phonecount
+    totalphonestext.setText(String.valueOf(modelList.size()));
+    }//GEN-LAST:event_undobuttonActionPerformed
+private int findModelIndex(int modelId) {
+    for (int i = 0; i < modelList.size(); i++) {
+        if (modelList.get(i).getModelId() == modelId) {
+            return i;
+        }
+    }
+    return -1;
+}
+private void initializeData() {
+    modelList = new LinkedList<>();
+    phoneCount = 0; // Initialize count to 0
+    undoStack.clearStack(); // Clear undo stack on initialization
 
     // Adding sample mobiles
-        addMobile(new ModelDetails(1,"Samsung Galaxy S23", "Samsung", 900, "256GB", 10));
-        addMobile(new ModelDetails(2,"iPhone 15 Pro", "Apple", 1200, "512GB", 5));
-        addMobile(new ModelDetails(3,"Google Pixel 8", "Google", 800, "128GB", 3));
-        addMobile(new ModelDetails(4,"Google Pixel 7", "Google", 800, "128GB", 3));
-        addMobile(new ModelDetails(5,"Google Pixel 3", "Google", 800, "128GB", 3));
+    ModelDetails model1 = new ModelDetails(1, "Samsung Galaxy S23", "Samsung", 900, "256GB", 10);
+    addMobile(model1);
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.ADD, model1));
 
-    }
+    ModelDetails model2 = new ModelDetails(2, "iPhone 15 Pro", "Apple", 1200, "512GB", 5);
+    addMobile(model2);
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.ADD, model2));
+
+    ModelDetails model3 = new ModelDetails(3, "Google Pixel 8", "Google", 800, "128GB", 3);
+    addMobile(model3);
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.ADD, model3));
+    
+    ModelDetails model4 = new ModelDetails(4,"Google Pixel 7", "Google", 800, "128GB", 3);
+    addMobile(model4);
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.ADD,model4));
+
+    ModelDetails model5 = new ModelDetails(5,"Google Pixel 3", "Google", 800, "128GB", 3);
+    addMobile(model5);
+    undoStack.pushAction(new UndoStack.StackAction(UndoStack.StackAction.ActionType.ADD,model5));
+}
     
     private void addMobile(ModelDetails model) {
     modelList.add(model);
     phoneCount++; //increment the row count
-    jLabel2.setText(String.valueOf(phoneCount));
+    totalphonestext.setText(String.valueOf(phoneCount));
     DefaultTableModel tableModel = (DefaultTableModel) admintable.getModel();
     tableModel.addRow(new Object[]{
             model.getModelId(), model.getModelName(), model.getBrand(),model.getPrice(), model.getStorage(), model.getQuantity()
@@ -1048,39 +1151,28 @@ public class login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbutton;
+    private javax.swing.JLabel addproduct;
     private javax.swing.JLabel admin;
     private javax.swing.JPanel adminpage;
     private javax.swing.JTable admintable;
     private javax.swing.JLabel admintitle;
+    private javax.swing.JLabel bestselling;
+    private javax.swing.JLabel bestsellingimg;
     private javax.swing.JLabel brand;
     private javax.swing.JTextField brandfield;
+    private javax.swing.JLabel brands;
+    private javax.swing.JLabel brandstext;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton clearbutton;
     private javax.swing.JButton deletebutton;
     private javax.swing.JLabel home;
     private javax.swing.JPanel homepage;
     private javax.swing.JLabel homepageimagelabel;
+    private javax.swing.JLabel indemand;
+    private javax.swing.JLabel indemandimg;
     private javax.swing.JRadioButton insertionradio;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel login;
     private javax.swing.JToggleButton loginbutton;
@@ -1101,20 +1193,31 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel price;
     private javax.swing.JTextField pricefield;
     private javax.swing.JLabel product;
+    private javax.swing.JLabel product1;
+    private javax.swing.JLabel product2;
+    private javax.swing.JLabel product3;
+    private javax.swing.JLabel product4;
+    private javax.swing.JLabel product5;
     private javax.swing.JPanel productpage;
     private javax.swing.JLabel quantity;
     private javax.swing.JTextField quantityfield;
     private javax.swing.JLabel sales;
     private javax.swing.JPanel salespage;
+    private javax.swing.JLabel salestitle;
     private javax.swing.JButton searchbutton;
+    private javax.swing.JLabel searchbybrand;
     private javax.swing.JTextField searchtext;
     private javax.swing.JRadioButton selectionradio;
     private javax.swing.JLabel storage;
     private javax.swing.JTextField storagefield;
+    private javax.swing.JLabel totalphones;
+    private javax.swing.JLabel totalphonestext;
+    private javax.swing.JButton undobutton;
     private javax.swing.JButton updatebutton;
     private javax.swing.JLabel username;
     private javax.swing.JLabel usernameerror;
     private javax.swing.JTextField usertext;
+    private javax.swing.JLabel viewproduct;
     private javax.swing.JLabel welcomeback;
     // End of variables declaration//GEN-END:variables
 }
