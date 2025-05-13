@@ -1,6 +1,6 @@
 package com.mobilehub.controller;
 
-import com.mobilehub.model.ProductForSale; // Use the existing model
+import com.mobilehub.model.Product; // Use the existing model
 import com.mobilehub.model.User; // Import User model
 
 import jakarta.servlet.RequestDispatcher;
@@ -24,22 +24,22 @@ public class UserDashboardServlet extends HttpServlet {
     // In a real app, these would query the database via Service/DAO layers
     // to get products marked as 'onSale' or 'featured'.
 
-    private List<ProductForSale> getMockSaleItems() {
+    private List<Product> getMockSaleItems() {
         System.out.println("UserDashboardServlet: Fetching mock SALE items...");
-        List<ProductForSale> saleItems = new ArrayList<>();
+        List<Product> saleItems = new ArrayList<>();
         // Example: Select 1-2 items marked for sale
-        saleItems.add(new ProductForSale(203, "Google Pixel 8 Pro", "Unmatched camera intelligence.", "https://via.placeholder.com/200x150/cccccc/000000?text=Pixel+8+SALE", 899.00)); // Lower price
-        saleItems.add(new ProductForSale(206, "Nothing Phone (2)", "Unique Glyph interface.", "https://via.placeholder.com/200x150/cccccc/000000?text=Nothing(2)SALE", 649.00)); // Lower price
+        saleItems.add(new Product(203, "Google Pixel 8 Pro", "Unmatched camera intelligence.", "https://via.placeholder.com/200x150/cccccc/000000?text=Pixel+8+SALE", 899.00)); // Lower price
+        saleItems.add(new Product(206, "Nothing Phone (2)", "Unique Glyph interface.", "https://via.placeholder.com/200x150/cccccc/000000?text=Nothing(2)SALE", 649.00)); // Lower price
         return saleItems;
     }
 
-    private List<ProductForSale> getMockFeaturedItems() {
+    private List<Product> getMockFeaturedItems() {
         System.out.println("UserDashboardServlet: Fetching mock FEATURED items...");
-        List<ProductForSale> featuredItems = new ArrayList<>();
+        List<Product> featuredItems = new ArrayList<>();
         // Example: Select a few premium/new items
-        featuredItems.add(new ProductForSale(201, "iPhone 15 Pro", "Experience the future with A17 Bionic.", "https://via.placeholder.com/200x150/cccccc/000000?text=iPhone+15", 1099.00));
-        featuredItems.add(new ProductForSale(202, "Samsung Galaxy S24 Ultra", "AI-powered features, stunning display.", "https://via.placeholder.com/200x150/cccccc/000000?text=Galaxy+S24", 1199.99));
-        featuredItems.add(new ProductForSale(204, "OnePlus 12", "Flagship killer performance.", "https://via.placeholder.com/200x150/cccccc/000000?text=OnePlus+12", 799.00));
+        featuredItems.add(new Product(201, "iPhone 15 Pro", "Experience the future with A17 Bionic.", "https://via.placeholder.com/200x150/cccccc/000000?text=iPhone+15", 1099.00));
+        featuredItems.add(new Product(202, "Samsung Galaxy S24 Ultra", "AI-powered features, stunning display.", "https://via.placeholder.com/200x150/cccccc/000000?text=Galaxy+S24", 1199.99));
+        featuredItems.add(new Product(204, "OnePlus 12", "Flagship killer performance.", "https://via.placeholder.com/200x150/cccccc/000000?text=OnePlus+12", 799.00));
         return featuredItems;
     }
     // --- End Placeholder Methods ---
@@ -72,8 +72,8 @@ public class UserDashboardServlet extends HttpServlet {
 
         try {
             // --- Fetch Data for the Home/Dashboard View ---
-            List<ProductForSale> saleItems = getMockSaleItems();
-            List<ProductForSale> featuredItems = getMockFeaturedItems();
+            List<Product> saleItems = getMockSaleItems();
+            List<Product> featuredItems = getMockFeaturedItems();
 
             // --- Set Data as Request Attributes for userdash.jsp ---
             request.setAttribute("saleItems", saleItems);

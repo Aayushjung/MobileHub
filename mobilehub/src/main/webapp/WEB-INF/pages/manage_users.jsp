@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <%
-    // Optional: Add the same security check here as a backup, although the servlet should handle it primarily.
-    // A Filter is the best place for this check.
+    // Security check (Backup to Servlet/Filter)
     Object userObj = session.getAttribute("user");
     String role = (String) session.getAttribute("role");
     if (userObj == null || !"admin".equalsIgnoreCase(role)) {
        session.setAttribute("errorMessage", "Admin access required.");
-       response.sendRedirect(request.getContextPath() + "/login"); // Redirect to login servlet
+       response.sendRedirect(request.getContextPath() + "/login");
        return;
     }
 %>
@@ -16,85 +16,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
-    <%-- Link to your main CSS or admin-specific CSS --%>
+    <title>Manage Users - Admin</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        /* Add specific styles for user table if needed */
-        .user-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .user-table th, .user-table td { border: 1px solid #555; padding: 8px 12px; text-align: left; }
-        .user-table th { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
-        .user-table td { color: #ccc; }
-        .user-table tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.05); }
-        .action-buttons form { display: inline-block; margin-right: 5px;}
-        .action-buttons button { padding: 3px 8px; font-size: 0.8em;}
-        .delete-btn { background-color: #dc3545; color: white; border: none; cursor: pointer; }
+        /* --- Styles for Manage Users Page (Ensure these are in style.css or here) --- */
+        /* body should already have padding-top from style.css if navbar is fixed */
+        .page-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .page-header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--admin-border-color, #dfe6e9); display: flex; justify-content: space-between; align-items: center;}
+        .page-header h1 { font-size: 1.8rem; font-weight: 600; color: var(--text-primary, #2c3e50); }
+        .back-link { display: inline-block; padding: 8px 15px; font-size: 0.9rem; background-color: var(--admin-sidebar-bg, #2c3e50); color: var(--admin-sidebar-text, #ecf0f1); text-decoration: none; border-radius: 5px; transition: background-color 0.2s; }
+        .back-link:hover { background-color: #3e5771; /* Darken admin sidebar bg */ }
+
+        .user-management-card { background-color: var(--card-bg, #fff); border-radius: 10px; padding: 25px 30px; box-shadow: 0 4px 15px var(--admin-card-shadow, rgba(44, 62, 80, 0.1)); border: 1px solid var(--admin-border-color, #dfe6e9); }
+        .table-actions { margin-bottom: 20px; text-align: right; }
+        .add-user-btn { padding: 8px 18px; background-color: var(--accent-green, #2ecc71); color: #fff; border: none; border-radius: 5px; text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
+        .add-user-btn:hover { background-color: #27ae60; }
+
+        .users-table-wrapper { overflow-x: auto; }
+        .users-table { width: 100%; border-collapse: collapse; }
+        .users-table th, .users-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--admin-border-color, #dfe6e9); font-size: 0.95rem; }
+        .users-table th { background-color: #f8f9fa; color: var(--text-primary, #2c3e50); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
+        .users-table tbody tr:hover { background-color: #f1f3f5; }
+        .action-buttons form { display: inline-block; margin-left: 8px; }
+        .action-buttons .btn-small { padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; text-decoration: none; color: white; border: none; cursor: pointer; transition: opacity 0.2s; }
+        .action-buttons .btn-small:hover { opacity: 0.85; }
+        .edit-btn { background-color: var(--accent-blue, #3498db); }
+        .delete-btn { background-color: var(--accent-red, #e74c3c); }
+        .info-message-table td { text-align: center; padding: 20px; color: var(--text-secondary); }
+        /* Success/Error messages from style.css should apply */
     </style>
 </head>
 <body>
-    <%-- You should include your navbar here --%>
-    <%-- <%@ include file="/WEB-INF/pages/includes/navbar.jsp" %> --%>
+    <%@ include file="/WEB-INF/pages/navbar.jsp" %>
 
-    <div class="dashboard-container"> <%-- Reuse dashboard container style or create a new one --%>
-        <h2>Manage Users</h2>
-        <p>View, edit, or remove user accounts.</p>
+    <div class="page-container">
+        <header class="page-header">
+            <h1>Manage Users</h1>
+            <a href="${pageContext.request.contextPath}/admin/dashboard" class="back-link">Back to Dashboard</a>
+        </header>
 
-        <%-- Display any messages passed from the servlet --%>
-        <c:if test="${not empty requestScope.successMessage}">
-            <p style="color: lightgreen;">${requestScope.successMessage}</p>
-        </c:if>
-         <c:if test="${not empty requestScope.errorMessage}">
-            <p style="color: #ff8080;">${requestScope.errorMessage}</p>
-        </c:if>
+        <div class="user-management-card">
+            <c:if test="${not empty successMessage}">
+                <p class="success-message">${successMessage}</p>
+            </c:if>
+            <c:if test="${not empty errorMessage}">
+                <p class="error-message">${errorMessage}</p>
+            </c:if>
 
+            <div class="table-actions">
+                <a href="#" class="add-user-btn">Add New User</a>
+            </div>
 
-        <%-- Placeholder for User Table - You will populate this using JSTL later --%>
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Created At</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%-- Use JSTL <c:forEach> here to loop through the user list fetched by the servlet --%>
-                 <%-- Example row (replace with loop) --%>
-                <c:forEach var="user" items="${userList}"> <%-- Assuming servlet sets 'userList' attribute --%>
-                   <tr>
-                       <td>${user.id}</td>
-                       <td><c:out value="${user.username}"/></td>
-                       <td><c:out value="${user.email}"/></td>
-                       <td><c:out value="${user.phone != null ? user.phone : 'N/A'}"/></td>
-                       <td><c:out value="${user.role}"/></td>
-                       <td>${user.createdAt}</td> <%-- Format this date later --%>
-                       <td class="action-buttons">
-                           <%-- Add Edit link/button --%>
-                           <a href="#">Edit</a> |
-                           <%-- Add Delete form/button --%>
-                           <form action="${pageContext.request.contextPath}/admin/manage-users" method="post" onsubmit="return confirm('Are you sure you want to delete user ${user.username}?');">
-                               <input type="hidden" name="action" value="delete">
-                               <input type="hidden" name="userId" value="${user.id}">
-                               <button type="submit" class="delete-btn">Delete</button>
-                           </form>
-                       </td>
-                   </tr>
-                </c:forEach>
-                 <c:if test="${empty userList}">
-                    <tr>
-                        <td colspan="7" style="text-align: center;">No users found.</td>
-                    </tr>
-                </c:if>
-            </tbody>
-        </table>
-
-         <p style="margin-top: 20px;"><a href="${pageContext.request.contextPath}/admin/dashboard">Back to Admin Dashboard</a></p>
-
+            <div class="users-table-wrapper">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Username</th><th>Email</th><th>Phone</th>
+                            <th>Role</th><th>Joined On</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:choose>
+                            <c:when test="${not empty userList}">
+                                <c:forEach var="userItem" items="${userList}"> <%-- Changed var name to avoid conflict with session.user --%>
+                                    <tr>
+                                        <td>${userItem.id}</td>
+                                        <td><c:out value="${userItem.username}"/></td>
+                                        <td><c:out value="${userItem.email}"/></td>
+                                        <td><c:out value="${not empty userItem.phone ? userItem.phone : 'N/A'}"/></td>
+                                        <td><c:out value="${userItem.role}"/></td>
+                                        <td><fmt:formatDate value="${userItem.createdAt}" pattern="yyyy-MM-dd HH:mm"/></td>
+                                        <td class="action-buttons">
+                                            <a href="#" class="btn-small edit-btn">Edit</a>
+                                            <form action="${pageContext.request.contextPath}/admin/manage-users" method="post" style="display:inline;"
+                                                  onsubmit="return confirm('Are you sure you want to delete user \'${userItem.username}\'? This action cannot be undone.');">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="userId" value="${userItem.id}">
+                                                <button type="submit" class="btn-small delete-btn">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <tr class="info-message-table"><td colspan="7">No other users found.</td></tr>
+                            </c:otherwise>
+                        </c:choose>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
 </body>
 </html>

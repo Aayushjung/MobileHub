@@ -2,7 +2,7 @@
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <%
-    // Security check (Ideally in a Filter)
+    // Security check
     Object user = session.getAttribute("user");
     String role = (String) session.getAttribute("role");
     if (user == null || !"admin".equalsIgnoreCase(role)) {
@@ -20,201 +20,144 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <%-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
+    <%-- Styles for Admin Dashboard Layout (can be in style.css) --%>
     <style>
-        /* --- === Basic Setup & Theme Variables (User Dash Theme) === --- */
-        :root {
-            /* Using User Dashboard Colors */
-            --sidebar-bg: #ffffff; /* White sidebar */
-            --sidebar-width: 260px;
-            --content-bg: #f4f0f9; /* Light lavender background */
-            --card-bg: #ffffff; /* White Cards */
-            --header-bg: #ede7f6; /* Very light lavender header for top bar if needed */
-            --primary-purple: #7e57c2; /* Main purple accent */
-            --primary-purple-dark: #673ab7;
-            --text-primary: #333; /* Darker text for content */
-            --text-secondary: #666; /* Grey text */
-            --sidebar-text: #444; /* Darker text for white sidebar */
-            --sidebar-text-hover: var(--primary-purple); /* Purple on hover */
-            --sidebar-title-color: #777; /* Muted title in sidebar */
-            --sidebar-hover-bg: #f0eef6; /* Light lavender hover bg */
-            --sidebar-active-border: var(--primary-purple); /* Purple active indicator */
-            --accent-red: #e74c3c; /* Logout button */
-            --accent-red-dark: #c0392b;
-            --stat-green: #2ecc71; /* Keep distinct stat colors */
-            --stat-blue: #3498db;
-            --stat-purple: #9b59b6;
-            --stat-red-icon: #e74c3c; /* Renamed to avoid conflict */
-            --shadow-color: rgba(126, 87, 194, 0.15); /* Shadow based on purple */
-            --border-color: #e0e0e0; /* Light border for cards/sidebar */
-            --sidebar-border: #e0e0e0; /* Light border within sidebar */
-        }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-size: 16px; scroll-behavior: smooth; }
-        body {
-            font-family: 'Poppins', sans-serif; font-weight: 400; line-height: 1.6;
-            color: var(--text-primary);
-            background-color: var(--content-bg); /* Body uses light lavender */
-            margin: 0;
+        /* Ensure :root variables for admin theme are in your style.css */
+        /* body already has padding-top for fixed navbar from style.css */
+
+        .admin-layout-container {
             display: flex;
-            min-height: 100vh;
+            width: 100%;
+            /* Calculate height below fixed navbar, assuming navbar height is 70px */
+            min-height: calc(100vh - 70px);
+            position: relative; /* To position sidebar absolutely if needed for mobile */
         }
 
-        /* --- === Layout Container (Sidebar + Main Content) === --- */
-        .admin-layout-container { display: flex; width: 100%; }
-
-        /* --- === Sidebar Navigation (White Background) === --- */
         .admin-sidebar {
-            width: var(--sidebar-width); flex-shrink: 0; background-color: var(--sidebar-bg);
-            color: var(--sidebar-text); padding: 25px 0; height: 100vh; position: sticky;
-            top: 0; display: flex; flex-direction: column; overflow-y: auto;
-            border-right: 1px solid var(--sidebar-border); /* Add right border */
+            width: 260px; /* Use var(--admin-sidebar-width) if defined */
+            flex-shrink: 0;
+            background-color: var(--admin-sidebar-bg, #2c3e50); /* Dark sidebar */
+            color: var(--admin-sidebar-text, #ecf0f1);
+            padding: 25px 0;
+            display: flex;
+            flex-direction: column;
+            /* If the top navbar is fixed, and this sidebar should also be fixed */
+            /* position: fixed; top: 70px; left: 0; height: calc(100vh - 70px); */
+            /* OR if it scrolls with page but is part of flex layout: */
+            height: auto; /* Let flex container manage height */
         }
-        .sidebar-logo {
-            text-align: left; padding: 0 25px 25px 25px; margin-bottom: 20px;
-            border-bottom: 1px solid var(--sidebar-border);
+
+        .sidebar-logo { /* This is for the logo INSIDE the admin sidebar */
+            text-align: left;
+            padding: 0 25px 25px 25px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--admin-sidebar-border, #3a5064);
         }
-        .sidebar-logo a {
-            color: var(--primary-purple); /* Logo uses theme color */
-            font-size: 1.6rem; font-weight: 600; text-decoration: none;
+        .sidebar-logo a { /* Logo text inside admin sidebar */
+            color: #fff; /* White text for dark sidebar */
+            font-size: 1.6rem;
+            font-weight: 600;
+            text-decoration: none;
         }
+
         .admin-sidebar h2 { /* "ADMIN TOOLS" Title */
              padding: 0 25px; margin-bottom: 15px; font-size: 0.8rem;
-             font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
-             color: var(--sidebar-title-color);
+             font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px;
+             color: var(--admin-sidebar-title-color, #95a5a6);
         }
         .admin-actions-list { list-style: none; padding: 0; flex-grow: 1; }
         .admin-actions-list li a {
-            color: var(--sidebar-text); text-decoration: none; font-weight: 500; /* Slightly bolder */
-            font-size: 0.95rem; display: block; padding: 12px 25px; /* Adjusted padding */
+            color: var(--admin-sidebar-text, #ecf0f1); text-decoration: none; font-weight: 400;
+            font-size: 0.95rem; display: block; padding: 11px 25px;
             border-left: 4px solid transparent;
             transition: color 0.2s, background-color 0.2s, border-color 0.2s;
         }
          .admin-actions-list li a:hover {
-             color: var(--sidebar-text-hover); background-color: var(--sidebar-hover-bg);
-             /* border-left-color: var(--sidebar-active-border); */ /* Only on active? */
+             color: var(--admin-sidebar-text-hover, #ffffff);
+             background-color: var(--admin-sidebar-hover-bg, rgba(236, 240, 241, 0.08));
          }
-         /* Active state styling */
          .admin-actions-list li.active a {
-            color: var(--sidebar-text-hover); background-color: var(--sidebar-hover-bg);
-            border-left-color: var(--sidebar-active-border); font-weight: 600;
+            color: var(--admin-sidebar-text-hover, #ffffff);
+            background-color: var(--admin-sidebar-hover-bg, rgba(236, 240, 241, 0.08));
+            border-left-color: var(--admin-sidebar-active-border, #e74c3c);
+            font-weight: 500;
          }
-        .sidebar-logout {
-             margin-top: auto; padding: 20px 25px;
-             border-top: 1px solid var(--sidebar-border); /* Border top */
-        }
-        .logout-btn {
+
+        .sidebar-logout { margin-top: auto; padding: 20px 25px; }
+        .logout-btn-sidebar {
             display: block; width: 100%; padding: 10px 15px; font-size: 0.9rem;
-            color: #fff; background-color: var(--accent-red); border: none;
+            color: #fff; background-color: var(--accent-red, #e74c3c); border: none;
             border-radius: 6px; text-decoration: none; cursor: pointer; text-align: center;
             transition: background-color 0.2s; font-weight: 500;
         }
-        .logout-btn:hover { background-color: var(--accent-red-dark); }
+        .logout-btn-sidebar:hover { background-color: var(--accent-red-dark, #c0392b); }
 
-        /* --- === Main Content Area (Light Lavender Background) === --- */
-        .admin-main-content { flex-grow: 1; padding: 40px; overflow-y: auto; height: 100vh; }
-
-        /* --- Dashboard Header --- */
-        .dash-header { margin-bottom: 35px; }
-        .dash-header h1 { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
-        .dash-header p { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
-
-        /* --- Stats Grid & Cards (Simple Style, White Background) --- */
-        .stats-grid { display: grid; gap: 25px; margin-bottom: 35px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-        .stat-card-alt {
-            background-color: var(--card-bg); padding: 20px; border-radius: 10px;
-            box-shadow: 0 4px 15px var(--shadow-color); border: 1px solid var(--border-color);
-            display: flex; align-items: center; gap: 15px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        .admin-main-content {
+            flex-grow: 1; padding: 40px; overflow-y: auto;
+            background-color: var(--admin-content-bg, #ecf0f1);
+            color: var(--text-primary, #2c3e50);
+            /* Ensure it can scroll if content is taller than sidebar area */
+             min-height: calc(100vh - 70px); /* If top navbar is fixed */
         }
-        .stat-card-alt:hover { transform: translateY(-3px); box-shadow: 0 6px 20px var(--shadow-color); }
-        .stat-icon-alt { width: 45px; height: 45px; border-radius: 8px; flex-shrink: 0; }
-        .stat-icon-alt.sales { background-color: var(--stat-green); }
-        .stat-icon-alt.orders { background-color: var(--stat-blue); }
-        .stat-icon-alt.customers { background-color: var(--stat-purple); }
-        .stat-icon-alt.products { background-color: var(--stat-red-icon); }
-        .stat-label-alt { font-size: 0.95rem; font-weight: 500; color: var(--text-primary); }
+        /* ... other admin content styles (dash-header, stats-grid, etc.) remain the same ... */
+        .admin-main-content .dash-header { margin-bottom: 35px; }
+        .admin-main-content .dash-header h1 { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+        .admin-main-content .dash-header p { font-size: 1rem; color: var(--text-secondary); font-weight: 300; }
+        .admin-main-content .stats-grid { display: grid; gap: 25px; margin-bottom: 35px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .admin-main-content .stat-card-alt { background-color: var(--card-bg); padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px var(--admin-card-shadow); border: 1px solid var(--admin-border-color); display: flex; align-items: center; gap: 15px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .admin-main-content .stat-card-alt:hover { transform: translateY(-3px); box-shadow: 0 6px 20px var(--admin-card-shadow); }
+        .admin-main-content .stat-icon-alt { width: 45px; height: 45px; border-radius: 8px; flex-shrink: 0; }
+        .admin-main-content .stat-icon-alt.sales { background-color: var(--stat-green); }
+        .admin-main-content .stat-icon-alt.orders { background-color: var(--stat-blue); }
+        .admin-main-content .stat-icon-alt.customers { background-color: var(--stat-purple); }
+        .admin-main-content .stat-icon-alt.products { background-color: var(--stat-red); }
+        .admin-main-content .stat-label-alt { font-size: 0.95rem; font-weight: 500; color: var(--text-primary); }
+        .admin-main-content .charts-grid { display: grid; gap: 25px; margin-bottom: 35px; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+        .admin-main-content .chart-card-alt { background-color: var(--card-bg); padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px var(--admin-card-shadow); border: 1px solid var(--admin-border-color); }
+        .admin-main-content .chart-header .title { color: var(--text-primary); font-size: 1.2rem; font-weight: 600; margin-bottom:5px; }
+        .admin-main-content .chart-header .subtitle { color: var(--text-secondary); font-size: 0.9rem; font-weight: 300; }
+        .admin-main-content .chart-placeholder-alt { background-color: #fdfdfd; border: 1px dashed #e0e0e0; color: var(--text-secondary); min-height: 280px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-style: italic; }
 
-        /* --- Charts Grid & Cards (White Background) --- */
-        .charts-grid { display: grid; gap: 25px; margin-bottom: 35px; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
-        .chart-card-alt { background-color: var(--card-bg); padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px var(--shadow-color); border: 1px solid var(--border-color); }
-        .chart-header { margin-bottom: 20px; }
-        .chart-header .title { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
-        .chart-header .subtitle { font-size: 0.9rem; color: var(--text-secondary); font-weight: 300; }
-        .chart-placeholder-alt { min-height: 280px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); background-color: #f9f9fb; border: 1px dashed #e0e0e0; border-radius: 8px; font-style: italic; }
-
-        /* --- Responsiveness --- */
+        /* Responsiveness for sidebar (basic hide on small screens) */
         @media (max-width: 992px) {
-             .admin-sidebar { display: none; }
-             .admin-main-content { width: 100%; }
+             .admin-sidebar {
+                 display: none; /* Simplest: hide. For hamburger, need JS & different CSS */
+             }
+             .admin-main-content {
+                 width: 100%; /* Take full width when sidebar is hidden */
+             }
         }
-        @media (max-width: 768px) {
-            .admin-main-content { padding: 25px; }
-             .stats-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
-             .dash-header h1 { font-size: 1.6rem; }
-             .chart-card-alt { padding: 20px; }
-             .chart-header .title { font-size: 1.1rem; }
-        }
-         @media (max-width: 480px) {
-            .admin-main-content { padding: 20px; }
-            .stats-grid { grid-template-columns: 1fr; }
-         }
-
     </style>
 </head>
 <body>
+
+    <%-- This is your TOP GLOBAL NAVBAR (e.g., for Home, Shop, User Profile, Logout) --%>
+    <%@ include file="/WEB-INF/pages/navbar.jsp" %>
+
+    <%-- This is the Admin Dashboard specific layout --%>
     <div class="admin-layout-container">
 
-        <%-- Sidebar Navigation (Now White) --%>
-        <aside class="admin-sidebar">
-            <div class="sidebar-logo">
-                 <%-- Logo text color changed --%>
-                <a href="${pageContext.request.contextPath}/admin/dashboard">MobileHub</a>
-            </div>
+       
 
-             <h2>ADMIN TOOLS</h2>
-             <ul class="admin-actions-list">
-                  <li><a href="${pageContext.request.contextPath}/admin/manage-users">Manage Users</a></li>
-                  <li><a href="#">Manage Products</a></li>
-                  <li><a href="#">View Reports</a></li>
-                  <li><a href="#">Site Settings</a></li>
-             </ul>
-
-            <div class="sidebar-logout">
-                <a href="${pageContext.request.contextPath}/logout" class="logout-btn">Logout</a>
-            </div>
-        </aside>
-
-        <%-- Main Content Area (Light Lavender Background) --%>
+        <%-- Main Admin Content Area --%>
         <main class="admin-main-content">
             <header class="dash-header">
                 <h1>Admin Dashboard</h1>
                 <p>Welcome back, <c:out value="${sessionScope.username}"/>! Here's an overview of your store performance.</p>
             </header>
 
-            <%-- Messages --%>
-            <c:if test="${not empty requestScope.dashboardErrorMessage}">
-                <p style="color: red; margin-bottom: 15px; font-weight: 500; background-color:#ffebee; padding:10px; border:1px solid red; border-radius:4px;">${requestScope.dashboardErrorMessage}</p>
-            </c:if>
-             <c:if test="${not empty requestScope.successMessage}">
-                <p style="color: green; margin-bottom: 15px; font-weight: 500; background-color:#e8f5e9; padding:10px; border:1px solid green; border-radius:4px;">${requestScope.successMessage}</p>
-            </c:if>
+            <%-- Display Messages --%>
+            <c:if test="${not empty requestScope.dashboardErrorMessage}"><p class="error-message">${requestScope.dashboardErrorMessage}</p></c:if>
+            <c:if test="${not empty requestScope.successMessage}"><p class="success-message">${requestScope.successMessage}</p></c:if>
 
             <%-- Stats Grid --%>
             <section class="stats-grid">
-                <div class="stat-card-alt">
-                    <div class="stat-icon-alt sales"></div> <span class="stat-label-alt">Total Sales</span>
-                </div>
-                 <div class="stat-card-alt">
-                    <div class="stat-icon-alt orders"></div> <span class="stat-label-alt">Total Orders</span>
-                </div>
-                 <div class="stat-card-alt">
-                    <div class="stat-icon-alt customers"></div> <span class="stat-label-alt">New Customers</span>
-                </div>
-                 <div class="stat-card-alt">
-                    <div class="stat-icon-alt products"></div> <span class="stat-label-alt">Active Products</span>
-                </div>
+                <div class="stat-card-alt"><div class="stat-icon-alt sales"></div><span class="stat-label-alt">Total Sales</span></div>
+                <div class="stat-card-alt"><div class="stat-icon-alt orders"></div><span class="stat-label-alt">Total Orders</span></div>
+                <div class="stat-card-alt"><div class="stat-icon-alt customers"></div><span class="stat-label-alt">New Customers</span></div>
+                <div class="stat-card-alt"><div class="stat-icon-alt products"></div><span class="stat-label-alt">Active Products</span></div>
             </section>
 
             <%-- Charts Grid --%>

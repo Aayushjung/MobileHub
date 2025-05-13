@@ -1,7 +1,7 @@
 package com.mobilehub.controller; // Ensure this matches your package structure
 
 // Import necessary classes (Product model, List, Servlet APIs)
-import com.mobilehub.model.ProductForSale; // Assuming ProductForSale is in the model package now
+import com.mobilehub.model.Product; // Assuming ProductForSale is in the model package now
 // Import ProductDAO/Service if you have one
 
 import jakarta.servlet.RequestDispatcher;
@@ -22,17 +22,17 @@ public class ProductsServlet extends HttpServlet {
 
     // --- Placeholder Service/DAO Method ---
     // Replace with actual call to ProductDAO/ProductService
-    private List<ProductForSale> getAvailableMobiles() {
+    private List<Product> getAvailableMobiles() {
         // This method should ideally live in a Service or DAO class
         System.out.println("ProductsServlet: Fetching mock available mobiles...");
-        List<ProductForSale> products = new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         // Same mock data as before for consistency
-        products.add(new ProductForSale(201, "iPhone 15 Pro", "Experience the future with the A17 Bionic chip and advanced camera.", "https://via.placeholder.com/200x150/cccccc/000000?text=iPhone+15", 1099.00));
-        products.add(new ProductForSale(202, "Samsung Galaxy S24 Ultra", "AI-powered features, stunning display, and powerful performance.", "https://via.placeholder.com/200x150/cccccc/000000?text=Galaxy+S24", 1199.99));
-        products.add(new ProductForSale(203, "Google Pixel 8 Pro", "Unmatched camera intelligence and Google AI integration.", "https://via.placeholder.com/200x150/cccccc/000000?text=Pixel+8", 999.00));
-        products.add(new ProductForSale(204, "OnePlus 12", "Flagship killer performance with Hasselblad camera.", "https://via.placeholder.com/200x150/cccccc/000000?text=OnePlus+12", 799.00));
-        products.add(new ProductForSale(205, "Xiaomi 14", "Compact powerhouse with Leica optics.", "https://via.placeholder.com/200x150/cccccc/000000?text=Xiaomi+14", 749.00));
-        products.add(new ProductForSale(206, "Nothing Phone (2)", "Unique Glyph interface and balanced performance.", "https://via.placeholder.com/200x150/cccccc/000000?text=Nothing(2)", 699.00));
+        products.add(new Product(201, "iPhone 15 Pro", "Experience the future with the A17 Bionic chip and advanced camera.", "https://via.placeholder.com/200x150/cccccc/000000?text=iPhone+15", 1099.00));
+        products.add(new Product(202, "Samsung Galaxy S24 Ultra", "AI-powered features, stunning display, and powerful performance.", "https://via.placeholder.com/200x150/cccccc/000000?text=Galaxy+S24", 1199.99));
+        products.add(new Product(203, "Google Pixel 8 Pro", "Unmatched camera intelligence and Google AI integration.", "https://via.placeholder.com/200x150/cccccc/000000?text=Pixel+8", 999.00));
+        products.add(new Product(204, "OnePlus 12", "Flagship killer performance with Hasselblad camera.", "https://via.placeholder.com/200x150/cccccc/000000?text=OnePlus+12", 799.00));
+        products.add(new Product(205, "Xiaomi 14", "Compact powerhouse with Leica optics.", "https://via.placeholder.com/200x150/cccccc/000000?text=Xiaomi+14", 749.00));
+        products.add(new Product(206, "Nothing Phone (2)", "Unique Glyph interface and balanced performance.", "https://via.placeholder.com/200x150/cccccc/000000?text=Nothing(2)", 699.00));
         return products;
     }
     // --- End Placeholder Method ---
@@ -54,7 +54,7 @@ public class ProductsServlet extends HttpServlet {
 
         // --- Fetch Product Data ---
         try {
-            List<ProductForSale> productList = getAvailableMobiles();
+            List<Product> productList = getAvailableMobiles();
             request.setAttribute("productList", productList); // Use a distinct attribute name
             System.out.println("ProductsServlet: Forwarding product list to products.jsp");
 

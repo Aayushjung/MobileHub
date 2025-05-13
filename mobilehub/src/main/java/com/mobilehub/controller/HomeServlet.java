@@ -28,7 +28,10 @@ class Product {
         this.imageUrl = imageUrl;
         this.badge = badge;
     }
-    // --- Getters needed for JSP EL access ---
+    public Product(int id2, String name2, String string, String imageUrl2, double d) {
+		// TODO Auto-generated constructor stub
+	}
+	// --- Getters needed for JSP EL access ---
     public int getId() { return id; }
     public String getName() { return name; }
     public double getPrice() { return price; }
