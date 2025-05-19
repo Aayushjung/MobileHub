@@ -1,0 +1,278 @@
+/* === style.css === */
+
+/* --- === Theme Variables (Combine elements from both themes) === --- */
+:root {
+    /* Core Palette (User/Product Page Inspired) */
+    --page-bg: #f4f0f9;        /* Light lavender page background */
+    --card-bg: #ffffff;        /* White cards */
+    --header-bg: #ede7f6;      /* Light lavender header/tabs */
+    --primary-purple: #7e57c2; /* Main purple accent */
+    --primary-purple-dark: #673ab7;
+    --text-primary: #333;      /* Darker text */
+    --text-secondary: #666;
+    --text-light: #555;
+    --button-bg: var(--primary-purple);
+    --button-text: #fff;
+    --button-hover-bg: var(--primary-purple-dark);
+    --card-shadow: rgba(126, 87, 194, 0.1); /* Lighter shadow */
+    --border-color: #e0e0e0;     /* Light border */
+    --navbar-bg: #ffffff;      /* White navbar */
+    --navbar-border: #e0e0e0;
+    --navbar-link-color: #444;
+    --navbar-link-hover: var(--primary-purple);
+    --navbar-brand-color: var(--primary-purple);
+
+    /* Accent Colors (Can be reused) */
+    --accent-red: #e74c3c;
+    --accent-red-dark: #c0392b;
+    --accent-green: #2ecc71;
+    --accent-blue: #3498db;
+    --accent-purple-stat: #9b59b6; /* Different from primary */
+
+    /* Admin Specific Palette (Used within admin layout) */
+    --admin-sidebar-bg: #2c3e50; /* Dark Blue/Grey Sidebar */
+    --admin-content-bg: #ecf0f1; /* Different grey for admin content */
+    --admin-sidebar-text: #ecf0f1;
+    --admin-sidebar-text-hover: #ffffff;
+    --admin-sidebar-title-color: #95a5a6;
+    --admin-sidebar-hover-bg: rgba(236, 240, 241, 0.08);
+    --admin-sidebar-active-border: var(--accent-red);
+    --admin-sidebar-border: #3a5064;
+    --admin-card-shadow: rgba(44, 62, 80, 0.1);
+    --admin-border-color: #dfe6e9;
+
+    /* Admin Full Screen Dark Gradient (Apply to specific container, NOT body) */
+    --admin-dark-gradient: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    --admin-dark-bg: rgba(25, 28, 36, 0.92);
+    --admin-dark-text: #e8e8e8;
+    --admin-dark-text-secondary: #cccccc;
+    --admin-dark-border: rgba(255, 255, 255, 0.15);
+}
+
+
+/* --- === CSS Reset & Basic Setup === --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+    font-family: 'Poppins', sans-serif; font-weight: 400; line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--page-bg); /* DEFAULT background for pages like Products/UserDash */
+    margin: 0;
+    min-height: 100vh;
+    /* CRITICAL: Add padding-top ONLY IF using fixed navbar */
+    padding-top: 70px; /* Adjust based on YOUR navbar height */
+}
+
+/* Background animation (can be applied to specific elements if needed) */
+@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+
+/* --- === STANDARD NAVBAR STYLES (From navbar.jsp setup) === --- */
+.navbar {
+    background-color: var(--navbar-bg);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--navbar-border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    position: fixed; /* Make sure navbar stays on top */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.navbar-container {
+    max-width: 1400px; /* Adjust width */
+    margin: 0 auto;
+    padding: 0 30px; /* Match page container padding */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-brand {
+    font-size: 1.6em; font-weight: bold; color: var(--navbar-brand-color);
+    text-decoration: none; transition: color 0.3s ease;
+}
+.navbar-brand:hover { color: var(--primary-purple-dark); text-decoration: none; }
+.navbar-links { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; }
+.navbar-links li { margin-left: 25px; }
+.navbar-links a { text-decoration: none; color: var(--navbar-link-color); font-size: 1em; transition: color 0.3s ease; font-weight: 500;}
+.navbar-links a:hover { color: var(--navbar-link-hover); text-decoration: none; }
+.navbar-links a.logout-link { color: var(--accent-red); font-weight: 500; }
+.navbar-links a.logout-link:hover { color: var(--accent-red-dark); }
+.navbar-links .navbar-user-greeting { color: var(--text-secondary); font-size: 0.95em; font-style: italic; }
+
+
+/* --- === Styles for Generic Pages (e.g., Products Page) === --- */
+.page-container {
+    max-width: 1400px; /* Consistent max width */
+    margin: 0 auto;
+    padding: 30px; /* Consistent padding */
+}
+.page-title {
+     font-size: 1.8rem; font-weight: 600; color: var(--text-primary);
+     margin-bottom: 25px; border-bottom: 1px solid var(--border-color);
+     padding-bottom: 10px;
+}
+/* Message Styles (used on multiple pages) */
+.error-message { color: #c0392b; background-color:#ffebee; padding:10px 15px; border:1px solid #e74c3c; border-radius:4px; margin-bottom: 15px; font-weight: 500;}
+.success-message { color: #1b5e20; background-color:#e8f5e9; padding:10px 15px; border:1px solid #27ae60; border-radius:4px; margin-bottom: 15px; font-weight: 500;}
+.info-message { color: var(--text-secondary); font-style: italic; }
+
+
+/* --- === Product Card Styles (for products.jsp, userdash.jsp) === --- */
+.product-grid { display: grid; gap: 25px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.product-card { background-color: var(--card-bg); border-radius: 10px; border: 1px solid var(--border-color); box-shadow: 0 3px 10px var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px var(--card-shadow); }
+.product-image { text-align: center; padding: 15px; background-color: #f9f9f9; min-height: 180px; display:flex; align-items: center; justify-content: center;}
+.product-image img { max-width: 100%; max-height: 150px; height: auto; object-fit: contain; }
+.product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column;}
+.product-info h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); min-height: 2.4em; }
+.product-info .description { font-size: 0.9rem; color: var(--text-light); margin-bottom: 15px; flex-grow: 1; min-height: 3.2em; }
+.product-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px solid #eee;}
+.product-actions .price { font-size: 1.1rem; font-weight: 600; color: var(--primary-purple); }
+.product-actions .buy-btn { padding: 7px 16px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 5px; text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
+.product-actions .buy-btn:hover { background-color: var(--button-hover-bg); }
+
+
+/* --- === User Dashboard Specific Styles === --- */
+/* (Layout container/sidebar removed, styles apply within main content) */
+.user-main-content {} /* Wrapper if needed */
+.page-header { /* UserDash header */
+    background-color: var(--header-bg); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color); /* Removed sticky */
+}
+.page-header h1 { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); }
+.header-actions button, .header-actions a { /* Buttons in UserDash Header */
+     margin-left: 15px; padding: 8px 18px; border-radius: 6px; font-size: 0.9rem;
+     font-weight: 500; text-decoration: none; cursor: pointer;
+     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+     display: inline-flex; align-items: center; gap: 6px;
+}
+.header-actions .shop-btn { background-color: #fff; color: var(--primary-purple); border: 1px solid var(--primary-purple); }
+.header-actions .shop-btn:hover { background-color: #f0eef6; }
+.header-actions .logout-btn { background-color: var(--primary-purple); color: #fff; border: 1px solid var(--primary-purple); }
+.header-actions .logout-btn:hover { background-color: var(--primary-purple-dark); border-color: var(--primary-purple-dark); }
+
+.content-wrapper { /* Padding for UserDash content below header/tabs */
+     padding: 30px 40px; background-color: var(--content-bg);
+}
+/* Tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); background-color: #f9f8fc; padding: 5px 5px 0 5px; border-radius: 8px; }
+.tab-link { padding: 12px 20px; cursor: pointer; border: none; border-bottom: 3px solid transparent; background-color: transparent; color: var(--tab-inactive); font-weight: 500; font-size: 0.95rem; transition: color 0.2s, border-color 0.2s; border-radius: 6px 6px 0 0; }
+.tab-link:hover { color: var(--primary-purple); }
+.tab-link.active { color: var(--primary-purple); border-bottom-color: var(--primary-purple); background-color: var(--tab-active-bg); }
+.tab-content { padding-top: 10px; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+/* Profile Section */
+.content-section-header { margin-bottom: 25px; }
+.content-section-header h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 4px; }
+.content-section-header p { color: var(--text-secondary); font-size: 0.95rem; }
+.profile-details-card { background-color: #fff; padding: 25px 30px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.05); max-width: 600px; }
+.profile-details-card dl { margin: 0; }
+.profile-details-card dt { font-weight: 600; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 3px; width: 100px; display: inline-block; vertical-align: top; }
+.profile-details-card dd { margin-left: 10px; margin-bottom: 15px; font-size: 1rem; color: var(--text-primary); display: inline-block; word-break: break-word; }
+.profile-details-card dd.not-provided { color: var(--text-secondary); font-style: italic; }
+.profile-actions { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: right; }
+.profile-actions .edit-btn { padding: 8px 18px; background-color: var(--button-bg); color: var(--button-text); border: none; border-radius: 5px; text-decoration: none; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s; }
+.profile-actions .edit-btn:hover { background-color: var(--button-hover-bg); }
+
+
+/* --- === ADMIN Dashboard Specific Styles === --- */
+/* Apply dark theme ONLY within the admin layout */
+.admin-layout-container { display: flex; width: 100%; }
+.admin-sidebar {
+    width: 260px; /* Use var if defined: var(--admin-sidebar-width, 260px); */
+    flex-shrink: 0; background-color: var(--admin-sidebar-bg);
+    color: var(--admin-sidebar-text); padding: 25px 0; height: 100vh; position: sticky;
+    top: 0; display: flex; flex-direction: column; overflow-y: auto;
+}
+.admin-main-content {
+    flex-grow: 1; padding: 40px; overflow-y: auto; height: 100vh;
+    background-color: var(--admin-content-bg); /* Different bg for admin content */
+    color: #333; /* Default dark text for admin content */
+}
+/* Re-style elements specifically for admin theme */
+.admin-sidebar .sidebar-logo a { color: #fff; font-size: 1.6rem; font-weight: 600; text-decoration: none; }
+.admin-sidebar h2 { color: var(--admin-sidebar-title-color); padding: 0 25px; margin-bottom: 15px; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
+.admin-sidebar .admin-actions-list { list-style: none; padding: 0; flex-grow: 1; }
+.admin-sidebar .admin-actions-list li a { color: var(--admin-sidebar-text); text-decoration: none; font-weight: 400; font-size: 0.95rem; display: block; padding: 11px 25px; border-left: 4px solid transparent; transition: color 0.2s, background-color 0.2s, border-color 0.2s; }
+.admin-sidebar .admin-actions-list li a:hover { color: var(--admin-sidebar-text-hover); background-color: var(--admin-sidebar-hover-bg); }
+.admin-sidebar .admin-actions-list li.active a { color: var(--admin-sidebar-text-hover); background-color: var(--admin-sidebar-hover-bg); border-left-color: var(--admin-sidebar-active-border); font-weight: 500; }
+.admin-sidebar .sidebar-logout { margin-top: auto; padding: 20px 25px; border-top: 1px solid var(--admin-sidebar-border); }
+.admin-sidebar .logout-btn { display: block; width: 100%; padding: 10px 15px; font-size: 0.9rem; color: #fff; background-color: var(--accent-red); border: none; border-radius: 6px; text-decoration: none; cursor: pointer; text-align: center; transition: background-color 0.2s; font-weight: 500; }
+.admin-sidebar .logout-btn:hover { background-color: var(--accent-red-dark); }
+
+/* Admin content header */
+.admin-main-content .dash-header h1 { color: #333; }
+.admin-main-content .dash-header p { color: #666; }
+/* Admin Stat/Chart Cards */
+.admin-main-content .stats-grid { display: grid; gap: 25px; margin-bottom: 35px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.admin-main-content .stat-card-alt { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px var(--admin-card-shadow); border: 1px solid var(--admin-border-color); display: flex; align-items: center; gap: 15px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.admin-main-content .stat-card-alt:hover { transform: translateY(-3px); box-shadow: 0 6px 20px var(--admin-card-shadow); }
+.admin-main-content .stat-icon-alt { width: 45px; height: 45px; border-radius: 8px; flex-shrink: 0; }
+.admin-main-content .stat-icon-alt.sales { background-color: var(--accent-green); }
+.admin-main-content .stat-icon-alt.orders { background-color: var(--accent-blue); }
+.admin-main-content .stat-icon-alt.customers { background-color: var(--accent-purple-stat); }
+.admin-main-content .stat-icon-alt.products { background-color: var(--accent-red); }
+.admin-main-content .stat-label-alt { font-size: 0.95rem; font-weight: 500; color: #333; }
+.admin-main-content .charts-grid { display: grid; gap: 25px; margin-bottom: 35px; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+.admin-main-content .chart-card-alt { background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px var(--admin-card-shadow); border: 1px solid var(--admin-border-color); }
+.admin-main-content .chart-header .title { color: #333; }
+.admin-main-content .chart-header .subtitle { color: #666; }
+.admin-main-content .chart-placeholder-alt { background-color: #fdfdfd; border: 1px dashed #e0e0e0; color: #aaa; /* Adjust */ min-height: 280px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-style: italic; }
+
+
+/* --- === Responsiveness (Consolidated & Refined) === --- */
+@media (max-width: 992px) {
+    /* Hide admin sidebar on smaller screens */
+     .admin-sidebar { display: none; }
+     .admin-main-content { width: 100%; } /* Ensure admin content takes full width */
+     /* Adjust padding for general pages */
+     .page-header { padding: 15px 25px; }
+     .content-wrapper, .page-container { padding: 25px; }
+}
+@media (max-width: 768px) {
+     /* Stack elements in UserDash header */
+     .page-header { flex-direction: column; align-items: flex-start; gap: 10px; padding: 15px 20px;}
+     .page-header h1 { font-size: 1.5rem; }
+     .header-actions { width: 100%; text-align: right; }
+     /* Adjust padding */
+     .content-wrapper, .page-container, .admin-main-content { padding: 20px; }
+     /* Adjust grids */
+     .stats-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
+     .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+     /* Tabs */
+     .tabs { flex-wrap: wrap; }
+     .tab-link { padding: 10px 15px; font-size: 0.9rem; }
+     /* Profile Card Adjust */
+     .profile-details-card { padding: 20px;}
+     .profile-details-card dt {width: 80px;}
+     /* Admin Header */
+     .admin-main-content .dash-header h1 { font-size: 1.6rem; }
+}
+@media (max-width: 480px) {
+    body { padding-top: 60px; /* Adjust for potentially smaller fixed navbar */ }
+    .navbar-container { padding: 0 15px; }
+    .page-header, .content-wrapper, .page-container, .admin-main-content { padding: 15px; }
+    /* Stack product cards */
+    .product-grid { grid-template-columns: 1fr; }
+    .product-card { flex-direction: column; align-items: stretch;}
+    .product-image { padding: 10px; flex-basis: auto; background-color: #f9f9f9; }
+    .product-image img { height: 120px; }
+    .product-info { padding: 15px; }
+    .product-info h3 { font-size: 1rem; margin-bottom: 5px; min-height: auto; }
+    .product-info .description { font-size: 0.85rem; margin-bottom: 10px; min-height: auto; }
+    .product-actions { flex-direction: row; align-items: center; gap: 8px; padding-top: 15px;}
+    /* Stack profile fields */
+    .profile-details-card dt, .profile-details-card dd { display: block; width: auto; margin-left: 0;}
+    .profile-details-card dt {margin-bottom: 2px;}
+    .profile-details-card dd {margin-bottom: 10px;}
+    .profile-actions {text-align: left;}
+    /* Stack admin stats */
+    .admin-main-content .stats-grid { grid-template-columns: 1fr; }
+    /* Smaller tabs */
+    .tabs { padding: 3px 3px 0 3px; }
+    .tab-link { padding: 8px 12px; font-size: 0.85rem; }
+}
+
+/* --- End of CSS --- */
